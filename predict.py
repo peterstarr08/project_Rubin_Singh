@@ -2,6 +2,7 @@ import torch
 from PIL import Image
 from torchvision import transforms
 import config
+from tqdm import tqdm  # Import tqdm for progress bar
 
 # Same transform as training
 transform = transforms.Compose([

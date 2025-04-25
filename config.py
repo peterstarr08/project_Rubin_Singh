@@ -21,7 +21,7 @@ image_size = (432, 288)
 # Training Hyperparameters
 batch_size = 10
 shuffle = True
-epochs = 20
+epochs = 35
 learning_rate = 0.001
 checkpoint_path = "checkpoints/final_weights.pth"
 momentum = 0.9

@@ -3,6 +3,7 @@ import torch.nn as nn
 import torch.optim as optim
 import config
 import os
+from tqdm import tqdm  # Just one package!
 
 def train_model(model, num_epochs, train_loader, loss_fn, optimizer, device="cpu"):
     model = model.to(device)
@@ -13,8 +14,11 @@ def train_model(model, num_epochs, train_loader, loss_fn, optimizer, device="cpu
     for epoch in range(num_epochs):
         model.train()
         running_loss = 0.0
+
+        # tqdm progress bar
+        loop = tqdm(train_loader, desc=f"Epoch [{epoch+1}/{num_epochs}]", leave=False)
         
-        for inputs, labels, _, _ in train_loader:
+        for inputs, labels, _, _ in loop:
             inputs, labels = inputs.to(device), labels.to(device)
             
             optimizer.zero_grad()
@@ -24,18 +28,16 @@ def train_model(model, num_epochs, train_loader, loss_fn, optimizer, device="cpu
             optimizer.step()
             
             running_loss += loss.item()
-        
-        # Print loss for the current epoch
+
+            # Update tqdm bar description
+            loop.set_postfix(loss=running_loss / (loop.n + 1))
+
         print(f"Epoch {epoch+1}/{num_epochs} - Loss: {running_loss/len(train_loader):.4f}")
-        
-        # Save the model after every epoch
-        epoch_checkpoint_path = f"{config.checkpoint_path.split('.')[0]}_epoch_{epoch+1}.pth"  # Modify path to include epoch number
+
+        # Save checkpoint
+        epoch_checkpoint_path = f"{config.checkpoint_path.split('.')[0]}_epoch_{epoch+1}.pth"
         torch.save(model.state_dict(), epoch_checkpoint_path)
         print(f"Model saved to {epoch_checkpoint_path}")
-
-    # Final save after training
-    torch.save(model.state_dict(), config.checkpoint_path)
-    print(f"Final model saved to {config.checkpoint_path}")
 
     return model
 
@@ -53,4 +55,4 @@ def evaluate(model, dataloader, device="cpu"):
     
     acc = 100 * correct / total
     print(f"Validation Accuracy: {acc:.2f}%")
-    return acc  # Changed from ACC to acc, assuming it was a typo
+    return acc
