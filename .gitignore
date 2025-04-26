@@ -5,3 +5,5 @@ test_*.py
 __pycache__/
 
 checkpoints/
+
+*.txt

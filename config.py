@@ -28,11 +28,13 @@ momentum = 0.9
 weight_decay = 1e-5  # L2 regularization (optional, if desired)
 
 
-conv1_out_channels = 32
-conv2_out_channels = 64
-conv3_out_channels = 128
-fc1_out_features = 128
-fc2_out_features = 64
+log=True
+
+conv1_out_channels = 64
+conv2_out_channels = 128
+conv3_out_channels = 256
+fc1_out_features = 256
+fc2_out_features = 128
 
 
 training_split = {

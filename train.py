@@ -52,7 +52,7 @@ def train_model(model, num_epochs, train_loader, loss_fn, optimizer, device=None
     torch.save(model.state_dict(), config.checkpoint_path)
     print(f"Final model saved to {config.checkpoint_path}")
 
-    return model
+    return model, epoch_loss, epoch_accuracy
 
 def evaluate(model, dataloader, device=None):
     """
