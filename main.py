@@ -45,18 +45,5 @@ def main():
     torch.save(model.state_dict(), config.checkpoint_path)
     print(f"Final model saved to {config.checkpoint_path}")
 
-    # Plot accuracy
-    plt.figure(figsize=(8, 5))
-    plt.plot(train_accuracies, label="Train Accuracy")
-    plt.plot(val_accuracies, label="Validation Accuracy")
-    plt.xlabel("Epoch")
-    plt.ylabel("Accuracy (%)")
-    plt.title("Training vs Validation Accuracy")
-    plt.legend()
-    plt.grid(True)
-    plt.tight_layout()
-    plt.savefig("accuracy_plot.png")  # Save plot to file
-    plt.show()  # Also display it
-
 if __name__ == "__main__":
     main()

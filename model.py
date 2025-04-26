@@ -8,7 +8,7 @@ class GenreCNNModel(nn.Module):
 
         self.block1 = nn.Sequential(
             nn.Conv2d(1, config.conv1_out_channels, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(config.conv1_out_channels),
+            # nn.BatchNorm2d(config.conv1_out_channels),
             nn.ReLU(),
             nn.Dropout(0.3),
             nn.MaxPool2d(2, 2)
@@ -16,7 +16,7 @@ class GenreCNNModel(nn.Module):
 
         self.block2 = nn.Sequential(
             nn.Conv2d(config.conv1_out_channels, config.conv2_out_channels, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(config.conv2_out_channels),
+            # nn.BatchNorm2d(config.conv2_out_channels),
             nn.ReLU(),
             nn.Dropout(0.3),
             nn.MaxPool2d(2, 2)
@@ -24,27 +24,27 @@ class GenreCNNModel(nn.Module):
 
         self.block3 = nn.Sequential(
             nn.Conv2d(config.conv2_out_channels, config.conv3_out_channels, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(config.conv3_out_channels),
+            # nn.BatchNorm2d(config.conv3_out_channels),
             nn.ReLU(),
             nn.Dropout(0.3),
             nn.MaxPool2d(2, 2)
         )
 
-        self.block4 = nn.Sequential(
-            nn.Conv2d(config.conv3_out_channels, config.conv4_out_channels, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(config.conv4_out_channels),
-            nn.ReLU(),
-            nn.Dropout(0.3),
-            # No MaxPool here — helps preserve spatial information
-        )
+        # self.block4 = nn.Sequential(
+        #     nn.Conv2d(config.conv3_out_channels, config.conv4_out_channels, kernel_size=3, stride=1, padding=1),
+        #     # nn.BatchNorm2d(config.conv4_out_channels),
+        #     nn.ReLU(),
+        #     nn.Dropout(0.3),
+        #     # No MaxPool here — helps preserve spatial information
+        # )
 
-        self.block5 = nn.Sequential(
-            nn.Conv2d(config.conv4_out_channels, config.conv5_out_channels, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(config.conv5_out_channels),
-            nn.ReLU(),
-            nn.Dropout(0.3),
-            nn.MaxPool2d(2, 2)  # Keep this final downsample
-        )
+        # self.block5 = nn.Sequential(
+        #     nn.Conv2d(config.conv4_out_channels, config.conv5_out_channels, kernel_size=3, stride=1, padding=1),
+        #     # nn.BatchNorm2d(config.conv5_out_channels),
+        #     nn.ReLU(),
+        #     nn.Dropout(0.3),
+        #     nn.MaxPool2d(2, 2)  # Keep this final downsample
+        # )
 
         self._flattened_size = self._get_flattened_size()
 
@@ -60,6 +60,7 @@ class GenreCNNModel(nn.Module):
             nn.Dropout(0.3)
         )
 
+
         self.fc3 = nn.Linear(config.fc2_out_features, num_classes)
 
     def _get_flattened_size(self):
@@ -68,16 +69,16 @@ class GenreCNNModel(nn.Module):
             x = self.block1(x)
             x = self.block2(x)
             x = self.block3(x)
-            x = self.block4(x)
-            x = self.block5(x)
+            # x = self.block4(x)
+            # x = self.block5(x)
             return x.view(1, -1).size(1)
 
     def forward(self, x):
         x = self.block1(x)
         x = self.block2(x)
         x = self.block3(x)
-        x = self.block4(x)
-        x = self.block5(x)
+        # x = self.block4(x)
+        # x = self.block5(x)
         x = x.view(x.size(0), -1)
         x = self.fc1(x)
         x = self.fc2(x)
