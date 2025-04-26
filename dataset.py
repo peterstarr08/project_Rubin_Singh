@@ -4,20 +4,18 @@ from PIL import Image
 import torch
 from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms
-import config  # Still use config for dataset_path, image_size, etc.
+import config
 
 class MusicGenreDataset(Dataset):
     def __init__(self, dataset_path=config.dataset_path):
         self.dataset_path = dataset_path
-
-        # Automatically detect genres (subfolder names) in dataset_path
+        
         self.genres = sorted([
             folder for folder in os.listdir(dataset_path)
             if os.path.isdir(os.path.join(dataset_path, folder))
         ])
 
         self.genre_to_label = {genre: idx for idx, genre in enumerate(self.genres)}
-
 
         self.transform = transforms.Compose([
             transforms.Grayscale(num_output_channels=1),
@@ -71,3 +69,9 @@ class MusicGenreDataset(Dataset):
 
 def genre_dataloader(dataset, batch_size=config.batch_size, shuffle=config.shuffle):
     return DataLoader(dataset, batch_size=batch_size, shuffle=shuffle)
+
+
+
+#This full dataset is used in interface.py to load the dataset for evaluation
+full_dataset = MusicGenreDataset(config.dataset_path)
+eval_dataloader = genre_dataloader(full_dataset, batch_size=config.batch_size, shuffle=True)

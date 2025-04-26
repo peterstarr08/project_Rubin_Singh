@@ -8,7 +8,7 @@ __pycache__/
 
 /utils
 
-/main.py
+main.py
 
 # Ignore all files in the data directory
 !data/blues/blues00088.png

@@ -15,7 +15,7 @@ def main():
     # Load dataset
     dataset = TheDataset()
 
-    # >>> Stratified split instead of random_split
+    # Stratified split
     train_dataset, test_dataset = dataset.stratified_split(train_ratio=config.training_split['train'])
 
     train_loader = the_dataloader(train_dataset, batch_size=the_batch_size, shuffle=True)
@@ -28,20 +28,14 @@ def main():
 
     print("Starting training...")
 
-    if config.log:  # Check if logging is enabled
-        # Open file for logging epoch data
+    if config.log:
         with open("training_log.txt", "w") as log_file:
-            log_file.write("Epoch, Loss, Accuracy, Test Loss\n")  # Header for the log
+            log_file.write("Epoch, Loss, Accuracy, Test Loss\n")
 
             for epoch in range(total_epochs):
                 print(f"\nEpoch {epoch + 1}/{total_epochs}:")
-                # Train the model and get loss and accuracy
                 model, epoch_loss, epoch_accuracy = the_trainer(model, 1, train_loader, loss_fn, optimizer, device)
-                
-                # Evaluate the model on the test set
                 epoch_test_loss = evaluate(model, test_loader, device)
-                
-                # Log the epoch loss, accuracy, and test loss
                 log_file.write(f"{epoch + 1}, {epoch_loss:.4f}, {epoch_accuracy:.4f}, {epoch_test_loss:.4f}\n")
                 print(f"Epoch Loss: {epoch_loss:.4f}, Epoch Accuracy: {epoch_accuracy:.4f}, Test Loss: {epoch_test_loss:.4f}")
     else:
@@ -51,7 +45,6 @@ def main():
             epoch_test_loss = evaluate(model, test_loader, device)
             print(f"Epoch Loss: {epoch_loss:.4f}, Epoch Accuracy: {epoch_accuracy:.4f}, Test Loss: {epoch_test_loss:.4f}")
 
-    # Save model
     torch.save(model.state_dict(), config.checkpoint_path)
     print(f"Final model saved to {config.checkpoint_path}")
 

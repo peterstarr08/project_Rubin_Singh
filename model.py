@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-import config  # Import the config.py file directly
+import config
 
 class GenreCNNModel(nn.Module):
     def __init__(self, num_classes):

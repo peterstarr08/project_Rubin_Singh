@@ -7,13 +7,26 @@ from tqdm import tqdm  # Just one package!
 
 def train_model(model, num_epochs, train_loader, loss_fn, optimizer, device=None):
     """
-    Train the model for a given number of epochs and return the trained model.
+        Train the model for a given number of epochs and return the trained model.
+
+        Args
+            model (torch.nn.Module): The model to train.
+            num_epochs (int): Number of epochs to train the model.
+            train_loader (torch.utils.data.DataLoader): DataLoader for the training dataset.
+            loss_fn (torch.nn.Module): Loss function to use for training.
+            optimizer (torch.optim.Optimizer): Optimizer to use for training.
+            device (str, optional): Device to use for training ('cuda' or 'cpu'). If None, will use the default device.
+
+
+        Returns
+            model (torch.nn.Module): The trained model.
+            epoch_loss (float): The average loss over the training dataset.
+            epoch_accuracy (float): The accuracy of the model on the training dataset.
     """
-    # Set the device to GPU if available, else fall back to CPU
+
     device = device or ('cuda' if torch.cuda.is_available() else 'cpu')
     model = model.to(device)
 
-    # Ensure the checkpoints directory exists
     os.makedirs(os.path.dirname(config.checkpoint_path), exist_ok=True)
 
     for epoch in range(num_epochs):
@@ -56,14 +69,21 @@ def train_model(model, num_epochs, train_loader, loss_fn, optimizer, device=None
 
 def evaluate(model, dataloader, device=None):
     """
-    Evaluate the model on a given dataloader and return the accuracy.
+        Evaluate the model on a given dataloader and return the accuracy.
+
+        Args:
+            model (torch.nn.Module): The model to evaluate.
+            dataloader (torch.utils.data.DataLoader): DataLoader for the evaluation dataset.
+            device (str, optional): Device to use for evaluation ('cuda' or 'cpu'). If None, will use the default device.
+
+        Returns:
+            acc (float): The accuracy of the model on the evaluation dataset. 
     """
     device = device or ('cuda' if torch.cuda.is_available() else 'cpu')
     model.eval()
     correct = 0
     total = 0
 
-    # Wrap the dataloader with tqdm for progress bar
     with torch.no_grad():
         loop = tqdm(dataloader, desc="Evaluating", leave=False)
         for inputs, labels, _, _ in loop:
@@ -73,7 +93,6 @@ def evaluate(model, dataloader, device=None):
             total += labels.size(0)
             correct += (predicted == labels).sum().item()
 
-            # Update tqdm progress bar with the current accuracy
             loop.set_postfix(acc=100 * correct / total)
 
     acc = 100 * correct / total
