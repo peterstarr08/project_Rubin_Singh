@@ -28,12 +28,13 @@ This project aims to **automate genre classification** using a **CNN model** on 
 
 ### 🏛️ Model Architecture
 
-A basic **CNN** with:
+Our CNN consists of **three convolutional blocks** (Conv2D → ReLU → Dropout → MaxPool), followed by **two fully connected layers** and a final **output layer**.
 
-- **Convolutional Layers**: Extract spatial patterns from spectrograms.
-- **Max-Pooling Layers**: Reduce dimensionality.
-- **Fully Connected Layers**: Classify extracted features.
-- **Softmax Output**: Output probability distribution over genres.
+- **Channels Progression**: 1 → 64 → 128 → 256
+- **Dropout**: 30% after conv layers, 50%/30% after FC layers
+- **Output**: 10 genres predicted using Softmax activation
+
+This lightweight structure is optimized for fast convergence on spectrogram images while maintaining high accuracy. More details later at bottom.
 
 ---
 
