@@ -3,7 +3,7 @@ import torch.nn as nn
 import torch.optim as optim
 import config
 import os
-from tqdm import tqdm  # Just one package!
+from tqdm import tqdm 
 
 def train_model(model, num_epochs, train_loader, loss_fn, optimizer, device=None):
     """
